@@ -7,7 +7,7 @@ st.title("OpenRouter chatbot app")
 
 # api_key, base_url = os.environ["API_KEY"], os.environ["BASE_URL"]
 api_key, base_url = st.secrets["API_KEY"], st.secrets["BASE_URL"]
-selected_model = "google/gemini-2.5-flash"
+selected_model = "gemini-2.5-flash"
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?."}]
