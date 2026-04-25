@@ -5,7 +5,6 @@ import os
 st.set_page_config(layout="wide", page_title="OpenRouter chatbot app")
 st.title("OpenRouter chatbot app")
 
-# api_key, base_url = os.environ["API_KEY"], os.environ["BASE_URL"]
 api_key, base_url = st.secrets["API_KEY"], st.secrets["BASE_URL"]
 selected_model = "gemini-2.5-flash"
 
@@ -29,3 +28,7 @@ if prompt := st.chat_input():
     msg = response.choices[0].message.content
     st.session_state.messages.append({"role": "assistant", "content": msg})
     st.chat_message("assistant").write(msg)
+
+uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
+if uploaded_file is not None:
+    df = uploaded_file
