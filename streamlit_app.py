@@ -2,7 +2,7 @@ import streamlit as st
 from openai import OpenAI
 import os
 
-from docloader import load_pdf
+from docloader import load_pdf, load_documents_from_folder
 
 st.set_page_config(layout="wide", page_title="OpenRouter chatbot app")
 st.title("OpenRouter chatbot app")
@@ -31,9 +31,8 @@ if prompt := st.chat_input():
     st.session_state.messages.append({"role": "assistant", "content": msg})
     st.chat_message("assistant").write(msg)
 
-
 with st.sidebar:
-    uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
+    uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf", accept_multiple_files=True)
     if uploaded_file is not None:
         df = uploaded_file
-        doc = load_pdf(df)
+        doc = load_documents_from_folder(df)
