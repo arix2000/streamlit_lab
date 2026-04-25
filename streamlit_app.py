@@ -32,7 +32,11 @@ if prompt := st.chat_input():
     st.chat_message("assistant").write(msg)
 
 with st.sidebar:
-    uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf", accept_multiple_files=True)
-    if uploaded_file is not None:
-        df = uploaded_file
-        doc = load_documents_from_folder(df)
+    files = st.file_uploader('Choose your .pdf file', type="pdf", accept_multiple_files=True)
+    if files:
+        for uploaded_file in files:
+            file_path = os.path.join(".", uploaded_file.name)
+            with open(file_path, "wb") as f:
+                f.write(uploaded_file.getvalue())
+            doc = load_documents_from_folder(file_path)
+            st.success(doc)
