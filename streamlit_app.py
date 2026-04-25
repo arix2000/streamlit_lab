@@ -38,5 +38,5 @@ with st.sidebar:
             file_path = os.path.join(".", uploaded_file.name)
             with open(file_path, "wb") as f:
                 f.write(uploaded_file.getvalue())
-            doc = load_documents_from_folder(file_path)
+            doc = load_pdf(file_path)
             st.success(doc)
