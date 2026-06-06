@@ -1,3 +1,13 @@
-openai
-streamlit
+faiss-cpu
+langchain
+langchain_core
+langchain_huggingface
+langchain_openai
+numpy
+pandas
+pydantic
 PyMuPDF
+pytest
+streamlit
+tiktoken
+watchdog
