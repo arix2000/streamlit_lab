@@ -2,6 +2,7 @@ import faiss
 import numpy as np
 from langchain_huggingface import HuggingFaceEmbeddings
 
+
 class FAISSIndex:
     def __init__(self, faiss_index, metadata):
         self.index = faiss_index
@@ -14,24 +15,37 @@ class FAISSIndex:
             results.append(self.metadata[idx])
         return results
 
-embed_model_id = ... # nazwa modelu
+
+embed_model_id = "sentence-transformers/all-MiniLM-L6-v2"
 model_kwargs = {"device": "cpu", "trust_remote_code": True}
 
+
 def create_index(documents):
-    embeddings = ... # załadowanie modelu embeddingowego
-    texts = ... # wartości tekstowe wszystkich dokumentów
-    metadata = ... # metadane wszystkich dokumentów, czyli słownik {filename:... , text:...}
+    embeddings = HuggingFaceEmbeddings(
+        model_name=embed_model_id,
+        model_kwargs=model_kwargs
+    )
+    texts = [doc.get("text", "") for doc in documents]
+    metadata = documents
 
     embeddings_matrix = [embeddings.embed_query(text) for text in texts]
     embeddings_matrix = np.array(embeddings_matrix).astype("float32")
 
-    index = faiss. ....# ustawienie indeksu przeszukwania
+    dimension = embeddings_matrix.shape[1]
+    index = faiss.IndexFlatL2(dimension)
     index.add(embeddings_matrix)
 
     return FAISSIndex(index, metadata)
 
+
 def retrieve_docs(query, faiss_index, k=3):
-    embeddings = ... # załadowanie modelu embeddingowego
-    query_embedding = ... # embeddowanie zapytania (query)
-    results = ... # zwrócenie wyników przeszukiwania
+    embeddings = HuggingFaceEmbeddings(
+        model_name=embed_model_id,
+        model_kwargs=model_kwargs
+    )
+
+    query_embedding = embeddings.embed_query(query)
+    query_matrix = np.array([query_embedding]).astype("float32")
+
+    results = faiss_index.similarity_search(query_matrix, k=k)
     return results
